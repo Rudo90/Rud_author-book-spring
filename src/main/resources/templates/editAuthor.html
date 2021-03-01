@@ -5,7 +5,7 @@
     <title>Edit Author</title>
 </head>
 <body>
-<form action="/author/edit">
+<form action="/author/add" method="post">
     <input type="hidden" name="id" th:if="${author != null}" th:value="${author.id}">
     <input type="text" name="name" th:value="${author.name}"> <br>
     <input type="text" name="surname" th:value="${author.surname}"> <br>

@@ -5,12 +5,12 @@
     <title>Edit book</title>
 </head>
 <body>
-<form action="/books/edit">
+<form action="/books/add" method="post">
     <input type="hidden" name="id" th:if="${book != null}" th:value="${book.id}">
     <input type="text" name="title" th:value="${book.title}"> <br>
     <textarea name="description" th:text="${book.description}"></textarea> <br>
     <input type="number" name="price" th:value="${book.price}"> <br>
-    <input type="number" name="author_id" th:value="${book.author}"> <br>
+    <input type="text" name="author_id" th:value="${book.author.id}"> <br>
     <input type="submit" value="save">
 </form>
 </body>

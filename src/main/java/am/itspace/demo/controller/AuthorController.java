@@ -1,6 +1,7 @@
 package am.itspace.demo.controller;
 
 import am.itspace.demo.models.Author;
+import am.itspace.demo.models.Book;
 import am.itspace.demo.repository.AuthorRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -38,20 +39,20 @@ public class AuthorController {
         return "allAuthors";
     }
 
-    @GetMapping("/author/delete")
+    @GetMapping("/author/delete/")
     public String deleteAuthor(@RequestParam("id") int id) {
         authorRepo.deleteById(id);
         return "redirect:/";
     }
 
-    @GetMapping("/author/edit")
+    @GetMapping("/author/edit/")
     public String editAuthor (@RequestParam(value = "id", required = false) Integer id, ModelMap modelMap){
         if (id != null){
             modelMap.addAttribute("author", authorRepo.getOne(id));
+        }else {
+            modelMap.addAttribute("author", new Author());
         }
         return "editAuthor";
-
     }
-
 
 }

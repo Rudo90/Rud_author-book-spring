@@ -25,7 +25,7 @@
         <td th:text="${author.gender}"></td>
         <td th:text="${author.bio}"></td>
         <td>
-            <a th:href="@{/author/edit(id=${author.id})}">Edit</a> / <a th:href="@{/author/delete(id=${author.id})}">Delete</a>
+            <a th:href="@{/author/edit/(id=${author.id})}">Edit</a> / <a th:href="@{/author/delete/(id=${author.id})}">Delete</a>
         </td>
     </tr>
     </tbody>

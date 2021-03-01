@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -43,18 +42,17 @@ public class BookController {
       return "allBooks";
     }
 
-    @GetMapping("/books/edit")
+    @GetMapping("/books/edit/")
     public String editBook(@RequestParam(value = "id", required = false) Integer id, ModelMap modelMap){
         if (id != null) {
             modelMap.addAttribute("book", bookRepo.getOne(id));
+        } else {
+            modelMap.addAttribute("book", new Book());
         }
-//        } else {
-//            modelMap.addAttribute("book", new Book());
-//        }
         return "editBook";
     }
 
-    @GetMapping("/books/delete")
+    @GetMapping("/books/delete/")
     public String deleteBook (@RequestParam("id") int id){
         bookRepo.deleteById(id);
         return "redirect:/";
