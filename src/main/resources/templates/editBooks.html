@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Books</title>
+</head>
+<body>
+<form action="/books/add" method="post">
+    <table>
+        <thead style="background-color: darkgray">
+        <tr>
+            <th>Id</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Author</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tr>
+            <td>
+                <input type="hidden" name="id" th:if="${book.id != null}" th:value="${book.id}">
+            </td>
+            <td>
+                <input type="text" name="title" th:value="${book.title}"> <br>
+            </td>
+            <td>
+                <textarea name="description" th:text="${book.description}"></textarea> <br>
+            </td>
+            <td>
+                <input type="number" name="price" th:value="${book.price}"> <br>
+            </td>
+            <td>
+                <select th:name="author_id">
+                    <option value=""></option>
+                    <option th:each="author : ${allAuthors}" th:value="${author.id}" th:utext="${author.name}
+                     + ' ' + ${author.surname}"></option>
+                </select>
+            </td>
+            <td>
+                <input type="submit" value="save">
+            </td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>
