@@ -5,7 +5,6 @@
     <title>Home Page</title>
 </head>
 <body>
-<p style="color: red" th:if="${message != null}" th:text="${message}"></p>
 <h2 style="color: blue">Add a new Author</h2>
 <form action="/author/add" method="post">
     <input type="text" name="name" placeholder="Author name"> <br>
@@ -17,7 +16,6 @@
     <input type="submit" value="add"> <br>
 </form>
 To see all Authors list visit <a href="/author/all">authors page</a>
-<p style="color: red" th:if="${msg!=null}" th:text="${msg}"></p>
 <h2 style="color: blue">Add a new Book</h2>
 <form action="/books/add" method="post">
     <input type="text" name="title" placeholder="Book title"> <br>

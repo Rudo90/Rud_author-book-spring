@@ -1,7 +1,6 @@
 package am.itspace.demo.controller;
 
 import am.itspace.demo.models.Author;
-import am.itspace.demo.models.Book;
 import am.itspace.demo.repository.AuthorRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -25,10 +24,8 @@ public class AuthorController {
     }
 
     @PostMapping("/author/add")
-    public String addAuthor(@ModelAttribute Author author, ModelMap modelMap) {
+    public String addAuthor(@ModelAttribute Author author) {
         authorRepo.save(author);
-        String msg = "Author was added successfully!";
-        modelMap.addAttribute("message", msg);
         return "home";
     }
 
