@@ -7,7 +7,7 @@
 <body>
 <form action="/books/add" method="post">
     <table>
-        <thead style="background-color: darkgray">
+        <thead style="background-color: #a9a9a9">
         <tr>
             <th>Id</th>
             <th>Title</th>
@@ -32,8 +32,7 @@
             </td>
             <td>
                 <select th:name="author_id">
-                    <option value=""></option>
-                    <option th:each="author : ${allAuthors}" th:value="${author.id}" th:utext="${author.name}
+                    <option th:each="author : ${allAuthors}" th:value="${author.id}" th:text="${author.name}
                      + ' ' + ${author.surname}"></option>
                 </select>
             </td>
