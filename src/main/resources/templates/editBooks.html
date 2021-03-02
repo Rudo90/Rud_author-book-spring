@@ -31,7 +31,7 @@
                 <input type="number" name="price" th:value="${book.price}"> <br>
             </td>
             <td>
-                <select th:name="author_id">
+                <select th:name="author.id">
                     <option th:each="author : ${allAuthors}" th:value="${author.id}" th:text="${author.name}
                      + ' ' + ${author.surname}"></option>
                 </select>
