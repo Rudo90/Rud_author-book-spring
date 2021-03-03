@@ -23,6 +23,7 @@ public class Author {
     private String email;
     private String gender;
     private String bio;
+    private String photoUrl;
 
 
 
