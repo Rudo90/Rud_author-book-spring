@@ -1,13 +1,15 @@
 package am.itspace.demo.controller;
 
 import am.itspace.demo.models.Book;
-import am.itspace.demo.repository.AuthorRepo;
-import am.itspace.demo.repository.BookRepo;
+import am.itspace.demo.service.AuthorService;
+import am.itspace.demo.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -15,18 +17,19 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BookController {
 
-    private final BookRepo bookRepo;
-    private final AuthorRepo authorRepo;
+    private final AuthorService authorService;
+    private final BookService bookService;
+
 
     @PostMapping("/books/add")
     public String addBook(@ModelAttribute Book book){
-        bookRepo.save(book);
+        bookService.save(book);
         return "home";
     }
 
     @GetMapping("/books/all")
     public String seeAllBooks(ModelMap modelMap){
-      List<Book> list = bookRepo.findAll();
+      List<Book> list = bookService.getBookList();
       modelMap.addAttribute("allBooks", list);
       return "allBooks";
     }
@@ -34,8 +37,8 @@ public class BookController {
     @GetMapping("/books/edit/")
     public String editBook(@RequestParam(value = "id", required = false) Integer id, ModelMap modelMap){
         if (id != null) {
-            modelMap.addAttribute("book", bookRepo.getOne(id));
-            modelMap.addAttribute("allAuthors", authorRepo.findAll());
+            modelMap.addAttribute("book", bookService.getOne(id));
+            modelMap.addAttribute("allAuthors", authorService.getAllAuthors());
         } else {
             modelMap.addAttribute("book", new Book());
         }
@@ -44,7 +47,7 @@ public class BookController {
 
     @GetMapping("/books/delete/")
     public String deleteBook (@RequestParam("id") int id){
-        bookRepo.deleteById(id);
+        bookService.deleteBookById(id);
         return "redirect:/";
     }
 }

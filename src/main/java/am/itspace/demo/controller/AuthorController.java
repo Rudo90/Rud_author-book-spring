@@ -1,7 +1,7 @@
 package am.itspace.demo.controller;
 
 import am.itspace.demo.models.Author;
-import am.itspace.demo.repository.AuthorRepo;
+import am.itspace.demo.service.AuthorService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,7 +9,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -20,7 +19,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AuthorController {
 
-    private final AuthorRepo authorRepo;
+    private final AuthorService authorService;
+
     @Value("${author.upload.dir}")
     private String uploadDir;
 
@@ -43,27 +43,27 @@ public class AuthorController {
             image.transferTo(file);
             author.setPhotoUrl(photoUrl);
         }
-        authorRepo.save(author);
+        authorService.save(author);
         return "home";
     }
 
     @GetMapping("/author/all")
     public String seeAllAuthors(ModelMap modelMap) {
-        List<Author> list = authorRepo.findAll();
+        List<Author> list = authorService.getAllAuthors();
         modelMap.addAttribute("allAuthors", list);
         return "allAuthors";
     }
 
     @GetMapping("/author/delete/")
     public String deleteAuthor(@RequestParam("id") int id) {
-        authorRepo.deleteById(id);
+        authorService.deleteById(id);
         return "redirect:/";
     }
 
     @GetMapping("/author/edit/")
     public String editAuthor (@RequestParam(value = "id", required = false) Integer id, ModelMap modelMap){
         if (id != null){
-            modelMap.addAttribute("author", authorRepo.getOne(id));
+            modelMap.addAttribute("author", authorService.getOne(id));
         }else {
             modelMap.addAttribute("author", new Author());
         }
