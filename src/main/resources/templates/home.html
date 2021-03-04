@@ -5,9 +5,9 @@
     <title>Home Page</title>
 </head>
 <body>
-<a href="/logout" th:if="${userName != null}">Logout</a>
-<a href="/login" th:if="${userName == null}">Login</a>
-<h2 th:text="Welcome + ' ' + ${userName}" th:if="${userName != null}"></h2>
+<!--<a href="/logout" th:if="${userName != null}">Logout</a>-->
+<!--<a href="/login" th:if="${userName == null}">Login</a>-->
+<!--<h2 th:text="Welcome + ' ' + ${userName}" th:if="${userName != null}"></h2>-->
 <h2 style="color: blue">Add a new Author</h2>
 <form action="/author/add" method="post" enctype="multipart/form-data">
     <input type="text" name="name" placeholder="Author name"> <br>
