@@ -25,7 +25,11 @@ To see all Authors list visit <a href="/author/all">authors page</a>
     <input type="text" name="title" placeholder="Book title"> <br>
     <textarea name="description" placeholder="Book description"></textarea> <br>
     <input type="number" step="0.1" name="price" placeholder="price"> <br>
-    <input type="number" name="author.id">
+<!--    <input type="number" name="author.id">-->
+    <select name="author.id">
+        <option th:each="author: ${allAuths}" th:value="${author.id}" th:text="${author.name}"></option>
+
+    </select>
     <input type="submit" value="add">
 </form>
 To see all Books list visit <a href="/books/all">books page</a>

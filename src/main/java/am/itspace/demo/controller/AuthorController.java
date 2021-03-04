@@ -34,6 +34,7 @@ public class AuthorController {
 //            userName = principal.getName();
 //        }
 //        model.addAttribute("userName", userName);
+        model.addAttribute("allAuths", authorService.getAllAuthors());
         return "home";
     }
 
