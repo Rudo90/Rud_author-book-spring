@@ -1,7 +1,5 @@
 package am.itspace.demo.controller;
 
-import am.itspace.demo.models.Author;
-import am.itspace.demo.models.Role;
 import am.itspace.demo.security.CurrentUser;
 import am.itspace.demo.service.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +7,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import java.security.Principal;
 
 @Controller
 public class MainController {
@@ -21,6 +18,7 @@ public class MainController {
     public String login() {
         return "loginPage";
     }
+
 /**
  * Ակտիվացնել երբ ունենանք /admin և /user
  * կոնտրոլյորները ու իրանց html-ները
@@ -40,10 +38,10 @@ public class MainController {
 //    }
 
     @GetMapping("/")
-    public String mainPage(@AuthenticationPrincipal Principal principal, Model model) {
+    public String mainPage(@AuthenticationPrincipal CurrentUser principal, Model model) {
        String userName = null;
         if (principal != null){
-            userName = principal.getName();
+            userName = principal.getUsername();
         }
         model.addAttribute("allAuths", authorService.getAllAuthors());
         model.addAttribute("userName", userName);
