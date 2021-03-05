@@ -9,7 +9,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-
 import java.security.Principal;
 
 @Controller
@@ -22,19 +21,23 @@ public class MainController {
     public String login() {
         return "loginPage";
     }
-
-    @GetMapping("/successLogin")
-    public String successLogin(@AuthenticationPrincipal CurrentUser currentUser) {
-        if (currentUser == null) {
-            return "redirect:/";
-        }
-        Author author = currentUser.getAuthor();
-        if (author.getRole() == Role.ADMIN) {
-            return "redirect:/admin";
-        } else {
-            return "redirect:/user";
-        }
-    }
+/**
+ * Ակտիվացնել երբ ունենանք /admin և /user
+ * կոնտրոլյորները ու իրանց html-ները
+ *
+ * */
+//    @GetMapping("/successLogin")
+//    public String successLogin(@AuthenticationPrincipal CurrentUser currentUser) {
+//        if (currentUser == null) {
+//            return "redirect:/";
+//        }
+//        Author author = currentUser.getAuthor();
+//        if (author.getRole() == Role.ADMIN) {
+//            return "redirect:/admin";
+//        } else {
+//            return "redirect:/user";
+//        }
+//    }
 
     @GetMapping("/")
     public String mainPage(@AuthenticationPrincipal Principal principal, Model model) {

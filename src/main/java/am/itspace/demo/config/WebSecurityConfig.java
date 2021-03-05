@@ -25,7 +25,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 .formLogin()
                 .loginPage("/login")
-                .defaultSuccessUrl("/successLogin")
+//                .defaultSuccessUrl("/successLogin")
                 .and()
                 .exceptionHandling().accessDeniedPage("/accessIsDenied")
                 .and()
