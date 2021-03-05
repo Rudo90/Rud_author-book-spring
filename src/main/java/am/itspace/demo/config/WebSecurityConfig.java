@@ -1,5 +1,6 @@
 package am.itspace.demo.config;
 
+import am.itspace.demo.security.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,30 +15,33 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private UserDetailsServiceImpl userDetailsServiceImpl;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .formLogin()
+                .loginPage("/login")
+                .defaultSuccessUrl("/successLogin")
+                .and()
+                .exceptionHandling().accessDeniedPage("/accessIsDenied")
                 .and()
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
                 .antMatchers(HttpMethod.GET, "/books/edit/").authenticated()
-                .antMatchers(HttpMethod.GET, "/books/delete/").hasAnyRole("ADMIN")
-                .antMatchers(HttpMethod.GET, "/author/edit/").authenticated()
-                .antMatchers(HttpMethod.GET, "/author/delete/").hasAnyRole("ADMIN");
+                .antMatchers(HttpMethod.GET, "/books/delete/").hasAnyAuthority("ADMIN")
+                .antMatchers(HttpMethod.GET, "/author/edit/").hasAnyAuthority("ADMIN")
+                .antMatchers(HttpMethod.GET, "/author/delete/").hasAnyAuthority("ADMIN");
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-                .withUser("poxos")
-                .password(passwordEncoder.encode("poxos"))
-                .roles("USER").and()
-                .withUser("petros")
-                .password(passwordEncoder.encode("petros"))
-                .roles("ADMIN");
+        auth.userDetailsService(userDetailsServiceImpl)
+                .passwordEncoder(passwordEncoder);
+
     }
 
 

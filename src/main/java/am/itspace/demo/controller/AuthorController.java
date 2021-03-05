@@ -1,11 +1,13 @@
 package am.itspace.demo.controller;
 
 import am.itspace.demo.models.Author;
+import am.itspace.demo.repository.AuthorRepo;
 import am.itspace.demo.service.AuthorService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -17,26 +19,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
 public class AuthorController {
 
     private final AuthorService authorService;
+    private final AuthorRepo authorRepo;
+    private final PasswordEncoder passwordEncoder;
 
     @Value("${author.upload.dir}")
     private String uploadDir;
-
-    @GetMapping("/")
-    public String mainPage(@AuthenticationPrincipal Principal principal, Model model) {
-//       String userName = null;
-//        if (principal != null){
-//            userName = principal.getName();
-//        }
-//        model.addAttribute("userName", userName);
-        model.addAttribute("allAuths", authorService.getAllAuthors());
-        return "home";
-    }
 
     @GetMapping(value = "/author/image")
     public @ResponseBody byte[] getImage(@RequestParam ("photoUrl") String photoUrl) throws IOException {
@@ -46,12 +40,17 @@ public class AuthorController {
 
     @PostMapping("/author/add")
     public String addAuthor(@ModelAttribute Author author, @RequestParam("image") MultipartFile image) throws IOException {
+       Optional<Author> byUsername = authorRepo.findByUsername(author.getUsername());
+       if (byUsername.isPresent()){
+           return "redirect:/?message=User already exist";
+       }
         if (image != null) {
             String photoUrl = System.currentTimeMillis() + "_" + image.getOriginalFilename();
             File file = new File(uploadDir + File.separator + photoUrl);
             image.transferTo(file);
             author.setPhotoUrl(photoUrl);
         }
+        author.setPassword(passwordEncoder.encode(author.getPassword()));
         authorService.save(author);
         return "home";
     }

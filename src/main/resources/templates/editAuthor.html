@@ -9,6 +9,8 @@
     <input type="hidden" name="id" th:if="${author != null}" th:value="${author.id}">
     <input type="text" name="name" th:value="${author.name}"> <br>
     <input type="text" name="surname" th:value="${author.surname}"> <br>
+    <input type="text" name="username" th:value="${author.username}"> <br>
+    <input type="hidden" name="password" th:value="${author.password}"><br>
     <input type="text" name="email" th:value="${author.email}"> <br>
     <input type="text" name="gender" th:value="${author.gender}"> <br>
     <textarea name="bio" th:text="${author.bio}"></textarea> <br>

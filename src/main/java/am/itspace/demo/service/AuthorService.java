@@ -18,7 +18,6 @@ public class AuthorService {
         authorRepo.save(author);
     }
 
-
     public List<Author> getAllAuthors() {
         return authorRepo.findAll();
     }
@@ -30,4 +29,5 @@ public class AuthorService {
     public Author getOne(int id) {
         return authorRepo.getOne(id);
     }
+
 }
