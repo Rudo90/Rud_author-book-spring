@@ -5,30 +5,34 @@
     <title>Home Page</title>
 </head>
 <body>
-<a href="/logout" th:if="${userName != null}">Logout</a>
-<a href="/login" th:if="${userName == null}">Login</a>
+<span> <a href="/?lang=hy">հայ</a> <br>
+    <a href="/?lang=ru">рус</a> <br>
+    <a href="/?lang=en">eng</a> <br>
+</span>
+<a href="/logout" th:if="${userName != null}" th:text="#{home.logout}"></a>
+<a href="/login" th:if="${userName == null}" th:text="#{home.login}"></a>
 <h2 th:text="Welcome + ' ' + ${userName}" th:if="${userName != null}"></h2>
-<h2 style="color: blue">Add a new Author</h2>
+<h2 style="color: blue" th:text="#{home.add.a.new.author}"></h2>
 <form action="/author/add" method="post" enctype="multipart/form-data">
     <input type="text" name="name" placeholder="Author name"> <br>
     <input type="text" name="surname" placeholder="Author surname"> <br>
     <input type="text" name="username" placeholder="create username"><br>
     <input type="password" name="password" placeholder="create password"> <br>
-    Select role
+    <span th:text="#{home.select.role}"></span>
     <select name="role">
         <option value="USER">---</option>
-        <option value="ADMIN">Admin</option>
-        <option value="USER">User</option>
+        <option value="ADMIN" th:text="#{home.admin}"></option>
+        <option value="USER" th:text="#{home.user}"></option>
     </select> <br>
     <input type="text" name="email" placeholder="email"> <br>
-    <input type="radio" name="gender" value="MALE"> : Male<br>
-    <input type="radio" name="gender" value="FEMALE"> : Female <br>
+    <input type="radio" name="gender" value="MALE"> <span th:text="#{home.male}"/><br>
+    <input type="radio" name="gender" value="FEMALE"> <span th:text="#{home.female}"/> <br>
     <textarea name="bio" placeholder="biography"></textarea> <br>
     <input type="file" name="image">
     <input type="submit" value="add"> <br>
 </form>
-To see all Authors list visit <a href="/author/all">authors page</a>
-<h2 style="color: blue">Add a new Book</h2>
+<span th:text="#{home.to.see.all.authors.list.visit}"></span> <a href="/author/all">authors page</a>
+<h2 style="color: blue" th:text="#{home.add.a.new.book}"></h2>
 <form action="/books/add" method="post">
     <input type="text" name="title" placeholder="Book title"> <br>
     <textarea name="description" placeholder="Book description"></textarea> <br>
@@ -39,6 +43,6 @@ To see all Authors list visit <a href="/author/all">authors page</a>
     </select>
     <input type="submit" value="add">
 </form>
-To see all Books list visit <a href="/books/all">books page</a>
+<span th:text="#{home.to.see.all.books.list.visit}"></span><a href="/books/all">books page</a>
 </body>
 </html>
