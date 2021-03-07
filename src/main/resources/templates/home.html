@@ -5,10 +5,7 @@
     <title>Home Page</title>
 </head>
 <body>
-<span> <a href="/?lang=hy">հայ</a> <br>
-    <a href="/?lang=ru">рус</a> <br>
-    <a href="/?lang=en">eng</a> <br>
-</span>
+<header th:insert="fragments/header.html"></header>
 <a href="/logout" th:if="${userName != null}" th:text="#{home.logout}"></a>
 <a href="/login" th:if="${userName == null}" th:text="#{home.login}"></a>
 <h2 th:text="Welcome + ' ' + ${userName}" th:if="${userName != null}"></h2>

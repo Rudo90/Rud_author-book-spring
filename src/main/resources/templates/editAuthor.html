@@ -5,10 +5,7 @@
     <title>Edit Author</title>
 </head>
 <body>
-<span> <a href="/?lang=hy">հայ</a> <br>
-    <a href="/?lang=ru">рус</a> <br>
-    <a href="/?lang=en">eng</a> <br>
-</span>
+<header th:insert="fragments/header.html"></header>
 <form action="/author/add" method="post">
     <input type="hidden" name="id" th:if="${author != null}" th:value="${author.id}">
     <input type="text" name="name" th:value="${author.name}"> <br>
