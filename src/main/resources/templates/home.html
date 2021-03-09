@@ -11,35 +11,35 @@
 <h2 th:text="Welcome + ' ' + ${userName}" th:if="${userName != null}"></h2>
 <h2 style="color: blue" th:text="#{home.add.a.new.author}"></h2>
 <form action="/author/add" method="post" enctype="multipart/form-data">
-    <input type="text" name="name" placeholder="Author name"> <br>
-    <input type="text" name="surname" placeholder="Author surname"> <br>
-    <input type="text" name="username" placeholder="create username"><br>
-    <input type="password" name="password" placeholder="create password"> <br>
+    <input type="text" name="name" th:placeholder="#{home.authorname}"> <br>
+    <input type="text" name="surname" th:placeholder="#{home.authorsurname}"> <br>
+    <input type="text" name="username" th:placeholder="#{home.authorusername}"><br>
+    <input type="password" name="password" th:placeholder="#{home.authorpassword}"> <br>
     <span th:text="#{home.select.role}"></span>
     <select name="role">
         <option value="USER">---</option>
         <option value="ADMIN" th:text="#{home.admin}"></option>
         <option value="USER" th:text="#{home.user}"></option>
     </select> <br>
-    <input type="text" name="email" placeholder="email"> <br>
+    <input type="text" name="email" th:placeholder="#{home.authoremail}"> <br>
     <input type="radio" name="gender" value="MALE"> <span th:text="#{home.male}"/><br>
     <input type="radio" name="gender" value="FEMALE"> <span th:text="#{home.female}"/> <br>
-    <textarea name="bio" placeholder="biography"></textarea> <br>
+    <textarea name="bio" th:placeholder="#{home.biography}"></textarea> <br>
     <input type="file" name="image">
     <input type="submit" value="add"> <br>
 </form>
-<span th:text="#{home.to.see.all.authors.list.visit}"></span> <a href="/author/all">authors page</a>
+<span th:text="#{home.to.see.all.authors.list.visit}"></span> <a href="/author/all" th:text="#{home.authorspage}"/>
 <h2 style="color: blue" th:text="#{home.add.a.new.book}"></h2>
 <form action="/books/add" method="post">
-    <input type="text" name="title" placeholder="Book title"> <br>
-    <textarea name="description" placeholder="Book description"></textarea> <br>
-    <input type="number" step="0.1" name="price" placeholder="price"> <br>
+    <input type="text" name="title" th:placeholder="#{home.book.title}"> <br>
+    <textarea name="description" th:placeholder="#{home.book.description}"></textarea> <br>
+    <input type="number" step="0.1" name="price" th:placeholder="#{home.book.price}"> <br>
     <select name="author.id">
         <option th:each="author: ${allAuths}" th:value="${author.id}" th:text="${author.name}"></option>
 
     </select>
     <input type="submit" value="add">
 </form>
-<span th:text="#{home.to.see.all.books.list.visit}"></span><a href="/books/all">books page</a>
+<span th:text="#{home.to.see.all.books.list.visit}"></span><a href="/books/all" th:text="#{home.bookspage}"/>
 </body>
 </html>

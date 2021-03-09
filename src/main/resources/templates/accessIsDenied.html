@@ -6,8 +6,8 @@
 </head>
 <body>
 <header th:insert="fragments/header.html"></header>
-<h1 style="color: red">To Edit or Delete an Author you must be an Admin!</h1><br>
-<a href="/">return</a> <br>
+<h1 style="color: red" th:text="#{accessDenied.message}"/><br>
+<a href="/" th:text="#{accessDenied.return}"/> <br>
 <img width="500px" height="300px" th:src="@{/download2.jpg}"/>
 </body>
 </html>
