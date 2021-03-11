@@ -55,14 +55,14 @@ public class AuthorController {
             author.setPhotoUrl(photoUrl);
             author.setPassword(passwordEncoder.encode(author.getPassword()));
             authorService.save(author);
-            emailSender.sandAttachedMessage("rud.java.demo@gmail.com", author.getEmail(),
+            emailSender.sandAttachedMessage("email_name", author.getEmail(),
                     "Verification success", "Dear " + author.getName() + " " + author.getSurname() +
                     " welcome to your account", uploadDir + File.separator + photoUrl);
         }
         else {
             author.setPassword(passwordEncoder.encode(author.getPassword()));
             authorService.save(author);
-            emailSender.sandSimpleMessage("rud.java.demo@gmail.com",
+            emailSender.sandSimpleMessage("email_name",
                     author.getEmail(), "Verification success",
                     "Dear " + author.getName() + " " + author.getSurname() +
                             " welcome to your account");
