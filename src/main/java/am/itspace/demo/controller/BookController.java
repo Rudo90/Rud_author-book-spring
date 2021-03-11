@@ -1,8 +1,8 @@
 package am.itspace.demo.controller;
 
 import am.itspace.demo.models.Book;
-import am.itspace.demo.service.AuthorService;
-import am.itspace.demo.service.BookService;
+import am.itspace.demo.service.entityService.AuthorService;
+import am.itspace.demo.service.entityService.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;

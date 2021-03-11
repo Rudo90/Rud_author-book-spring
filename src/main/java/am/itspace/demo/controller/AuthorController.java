@@ -2,22 +2,23 @@ package am.itspace.demo.controller;
 
 import am.itspace.demo.models.Author;
 import am.itspace.demo.repository.AuthorRepo;
-import am.itspace.demo.service.AuthorService;
+import am.itspace.demo.service.emailService.EmailSender;
+import am.itspace.demo.service.entityService.AuthorService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.IOUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.mail.MessagingException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,6 +30,9 @@ public class AuthorController {
     private final AuthorRepo authorRepo;
     private final PasswordEncoder passwordEncoder;
 
+    @Autowired
+    EmailSender emailSender;
+
     @Value("${author.upload.dir}")
     private String uploadDir;
 
@@ -39,19 +43,30 @@ public class AuthorController {
     }
 
     @PostMapping("/author/add")
-    public String addAuthor(@ModelAttribute Author author, @RequestParam("image") MultipartFile image) throws IOException {
+    public String addAuthor(@ModelAttribute Author author, @RequestParam("image") MultipartFile image) throws IOException, MessagingException {
        Optional<Author> byUsername = authorRepo.findByUsername(author.getUsername());
        if (byUsername.isPresent()){
            return "redirect:/?message=User already exist";
        }
-        if (image != null) {
+        if (image != null && !image.isEmpty()) {
             String photoUrl = System.currentTimeMillis() + "_" + image.getOriginalFilename();
             File file = new File(uploadDir + File.separator + photoUrl);
             image.transferTo(file);
             author.setPhotoUrl(photoUrl);
+            author.setPassword(passwordEncoder.encode(author.getPassword()));
+            authorService.save(author);
+            emailSender.sandAttachedMessage("rud.java.demo@gmail.com", author.getEmail(),
+                    "Verification success", "Dear " + author.getName() + " " + author.getSurname() +
+                    " welcome to your account", uploadDir + File.separator + photoUrl);
         }
-        author.setPassword(passwordEncoder.encode(author.getPassword()));
-        authorService.save(author);
+        else {
+            author.setPassword(passwordEncoder.encode(author.getPassword()));
+            authorService.save(author);
+            emailSender.sandSimpleMessage("rud.java.demo@gmail.com",
+                    author.getEmail(), "Verification success",
+                    "Dear " + author.getName() + " " + author.getSurname() +
+                            " welcome to your account");
+        }
         return "home";
     }
 

@@ -1,4 +1,4 @@
-package am.itspace.demo.service;
+package am.itspace.demo.service.entityService;
 
 
 import am.itspace.demo.models.Author;

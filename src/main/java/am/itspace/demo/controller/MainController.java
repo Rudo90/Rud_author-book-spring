@@ -1,7 +1,7 @@
 package am.itspace.demo.controller;
 
 import am.itspace.demo.security.CurrentUser;
-import am.itspace.demo.service.AuthorService;
+import am.itspace.demo.service.entityService.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;

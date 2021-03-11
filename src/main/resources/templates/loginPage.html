@@ -6,12 +6,8 @@
 </head>
 <body>
 <header th:insert="fragments/header.html"></header>
-<div style="color: red;" class="alert alert-danger text-center" th:if="${param.error}">
-    Invalid username or password!
-</div> <br>
-<div style="color: green;" class="alert alert-success text-center" th:if="${param.logout}">
-    You have been logged out!
-</div>
+<div style="color: red;" class="alert alert-danger text-center" th:if="${param.error}" th:text="#{login.error}"/> <br>
+<div style="color: green;" class="alert alert-success text-center" th:if="${param.logout}" th:text="#{login.logoutmessage}"/>
 
 <form action="/login" method="post">
     <input type="text" name="username" th:placeholder="#{login.username}"/> <br>
