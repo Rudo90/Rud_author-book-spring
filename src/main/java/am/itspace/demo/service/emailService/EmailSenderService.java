@@ -15,12 +15,11 @@ import java.io.FileNotFoundException;
 
 @Service
 @RequiredArgsConstructor
-@Async
-public class EmailSender {
+public class EmailSenderService {
 
     private final JavaMailSender sender;
 
-
+    @Async
     public void sandSimpleMessage(String from, String to, String subject, String text) {
 
         SimpleMailMessage mailMessage = new SimpleMailMessage();
@@ -32,7 +31,8 @@ public class EmailSender {
         sender.send(mailMessage);
     }
 
-    public void sandAttachedMessage(String from, String to, String subject, String text, String fileUrl) throws MessagingException, FileNotFoundException {
+    @Async
+    public void sandRegistrationAttachedMessage(String from, String to, String subject, String text, String fileUrl) throws MessagingException, FileNotFoundException {
 
         MimeMessage mimeMessage = sender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
@@ -44,11 +44,12 @@ public class EmailSender {
 
         FileSystemResource file = new FileSystemResource(new File(fileUrl));
         String fileName = file.getFilename();
-        if(fileName!= null && fileName.length()!=0) {
+        if (fileName != null && fileName.length() != 0) {
             helper.addAttachment(fileName, file);
         }
 
         sender.send(mimeMessage);
 
     }
+
 }

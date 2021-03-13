@@ -2,7 +2,7 @@ package am.itspace.demo.controller;
 
 import am.itspace.demo.models.Author;
 import am.itspace.demo.repository.AuthorRepo;
-import am.itspace.demo.service.emailService.EmailSender;
+import am.itspace.demo.service.emailService.EmailSenderService;
 import am.itspace.demo.service.entityService.AuthorService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.IOUtils;
@@ -13,7 +13,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.mail.MessagingException;
 import java.io.File;
 import java.io.FileInputStream;
@@ -31,16 +30,37 @@ public class AuthorController {
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    EmailSender emailSender;
+    EmailSenderService emailSender;
 
     @Value("${author.upload.dir}")
     private String uploadDir;
 
     @GetMapping(value = "/author/image")
-    public @ResponseBody byte[] getImage(@RequestParam ("photoUrl") String photoUrl) throws IOException {
+    @ResponseBody
+    public byte[] getImage(@RequestParam ("photoUrl") String photoUrl) throws IOException {
         InputStream in = new FileInputStream(uploadDir + File.separator + photoUrl);
         return IOUtils.toByteArray(in);
     }
+
+    @PostMapping("/author/update/save")
+    public String updateAndSave(@ModelAttribute Author author, @RequestParam("image") MultipartFile photo) throws IOException, MessagingException {
+        if (photo != null && !photo.isEmpty()) {
+            String photoUrl = System.currentTimeMillis() + "_" + photo.getOriginalFilename();
+            File file = new File(uploadDir + File.separator + photoUrl);
+            photo.transferTo(file);
+            author.setPhotoUrl(photoUrl);
+            author.setPassword(passwordEncoder.encode(author.getPassword()));
+            authorService.save(author);
+            emailSender.sandRegistrationAttachedMessage("rud.java.demo@gmail.com", author.getEmail(),
+                    "Verification success", "Dear " + author.getName() + " " + author.getSurname() +
+                            " welcome to your account", uploadDir + File.separator + photoUrl);
+        }
+        authorService.save(author);
+        return "home";
+    }
+
+
+
 
     @PostMapping("/author/add")
     public String addAuthor(@ModelAttribute Author author, @RequestParam("image") MultipartFile image) throws IOException, MessagingException {
@@ -55,7 +75,7 @@ public class AuthorController {
             author.setPhotoUrl(photoUrl);
             author.setPassword(passwordEncoder.encode(author.getPassword()));
             authorService.save(author);
-            emailSender.sandAttachedMessage("rud.java.demo@gmail.com", author.getEmail(),
+            emailSender.sandRegistrationAttachedMessage("rud.java.demo@gmail.com", author.getEmail(),
                     "Verification success", "Dear " + author.getName() + " " + author.getSurname() +
                     " welcome to your account", uploadDir + File.separator + photoUrl);
         }
@@ -90,6 +110,13 @@ public class AuthorController {
         }else {
             modelMap.addAttribute("author", new Author());
         }
+//        String targetEmail = authorService.getOne(id).getEmail();
+//        emailSender.sandSimpleMessage("rud.java.demo@gmail.com", targetEmail, "Account Updates",
+//                "Dear " + authorService.getOne(id).getName() + " " + authorService.getOne(id).getSurname() +
+//                        " following updates were done to your account: \n" + "Author name: " + authorService.getOne(id).getName() +
+//                        "\n Author surname: " + authorService.getOne(id).getSurname() +
+//                        "\n username: " + authorService.getOne(id).getUsername() +
+//                        "\n biography: " + authorService.getOne(id).getBio());
         return "editAuthor";
     }
 
