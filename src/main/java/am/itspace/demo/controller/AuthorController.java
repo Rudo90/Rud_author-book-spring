@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
 import javax.mail.MessagingException;
 import java.io.File;
 import java.io.FileInputStream;
@@ -36,8 +37,7 @@ public class AuthorController {
     private String uploadDir;
 
     @GetMapping(value = "/author/image")
-    @ResponseBody
-    public byte[] getImage(@RequestParam ("photoUrl") String photoUrl) throws IOException {
+    public @ResponseBody byte[] getImage(@RequestParam ("photoUrl") String photoUrl) throws IOException {
         InputStream in = new FileInputStream(uploadDir + File.separator + photoUrl);
         return IOUtils.toByteArray(in);
     }
@@ -51,7 +51,7 @@ public class AuthorController {
             author.setPhotoUrl(photoUrl);
             author.setPassword(passwordEncoder.encode(author.getPassword()));
             authorService.save(author);
-            emailSender.sandRegistrationAttachedMessage("rud.java.demo@gmail.com", author.getEmail(),
+            emailSender.sandRegistrationAttachedMessage("email_name", author.getEmail(),
                     "Verification success", "Dear " + author.getName() + " " + author.getSurname() +
                             " welcome to your account", uploadDir + File.separator + photoUrl);
         }
@@ -60,14 +60,12 @@ public class AuthorController {
     }
 
 
-
-
     @PostMapping("/author/add")
     public String addAuthor(@ModelAttribute Author author, @RequestParam("image") MultipartFile image) throws IOException, MessagingException {
-       Optional<Author> byUsername = authorRepo.findByUsername(author.getUsername());
-       if (byUsername.isPresent()){
-           return "redirect:/?message=User already exist";
-       }
+        Optional<Author> byUsername = authorRepo.findByUsername(author.getUsername());
+        if (byUsername.isPresent()){
+            return "redirect:/?message=User already exist";
+        }
         if (image != null && !image.isEmpty()) {
             String photoUrl = System.currentTimeMillis() + "_" + image.getOriginalFilename();
             File file = new File(uploadDir + File.separator + photoUrl);
@@ -75,14 +73,14 @@ public class AuthorController {
             author.setPhotoUrl(photoUrl);
             author.setPassword(passwordEncoder.encode(author.getPassword()));
             authorService.save(author);
-            emailSender.sandRegistrationAttachedMessage("rud.java.demo@gmail.com", author.getEmail(),
+            emailSender.sandRegistrationAttachedMessage("email_name", author.getEmail(),
                     "Verification success", "Dear " + author.getName() + " " + author.getSurname() +
-                    " welcome to your account", uploadDir + File.separator + photoUrl);
+                            " welcome to your account", uploadDir + File.separator + photoUrl);
         }
         else {
             author.setPassword(passwordEncoder.encode(author.getPassword()));
             authorService.save(author);
-            emailSender.sandSimpleMessage("rud.java.demo@gmail.com",
+            emailSender.sandSimpleMessage("email_name",
                     author.getEmail(), "Verification success",
                     "Dear " + author.getName() + " " + author.getSurname() +
                             " welcome to your account");
@@ -110,13 +108,6 @@ public class AuthorController {
         }else {
             modelMap.addAttribute("author", new Author());
         }
-//        String targetEmail = authorService.getOne(id).getEmail();
-//        emailSender.sandSimpleMessage("rud.java.demo@gmail.com", targetEmail, "Account Updates",
-//                "Dear " + authorService.getOne(id).getName() + " " + authorService.getOne(id).getSurname() +
-//                        " following updates were done to your account: \n" + "Author name: " + authorService.getOne(id).getName() +
-//                        "\n Author surname: " + authorService.getOne(id).getSurname() +
-//                        "\n username: " + authorService.getOne(id).getUsername() +
-//                        "\n biography: " + authorService.getOne(id).getBio());
         return "editAuthor";
     }
 
